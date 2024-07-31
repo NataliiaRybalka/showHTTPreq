@@ -9,7 +9,7 @@ from dependencies import get_db
 from typing import List, Any, Dict
 from datetime import datetime
 import logging
-from pyrsistent import pmap
+# from pyrsistent import pmap
 from pprint import pformat
 
 router = APIRouter()
@@ -298,7 +298,7 @@ async def logs_parsed_by_page(page_str: int, db: Session = Depends(get_db)):
 
     # # Запись результата в файл для анализа
     # response_log_file_path = os.path.join(log_dir, f"response_page_{page}.txt")
-    # csv_file_path = os.path.join(log_dir, f"response_page_{page}.csv")
+    csv_file_path = os.path.join(log_dir, f"response_page_{page}.csv")
 
     # Обработка данных перед сериализацией
     processed_result = replace_newlines(result)
@@ -307,13 +307,13 @@ async def logs_parsed_by_page(page_str: int, db: Session = Depends(get_db)):
     logging.info(f'Result before saving: {json.dumps(processed_result, default=default_serializer, indent=4)}')
 
     # with open(response_log_file_path, "w", encoding="utf-8") as log_file:
-        # log_file.write(json.dumps(processed_result, indent=4, default=default_serializer))
+    #     log_file.write(json.dumps(processed_result, indent=4, default=default_serializer))
     
     # Запись данных в CSV файл
-    # with open(csv_file_path, "w", newline='', encoding="utf-8") as csv_file:
-        # writer = csv.DictWriter(csv_file, fieldnames=processed_result[0].keys())
-        # writer.writeheader()
-        # writer.writerows(processed_result)
+    with open(csv_file_path, "w", newline='', encoding="utf-8") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=processed_result[0].keys())
+        writer.writeheader()
+        writer.writerows(processed_result)
     
     # logging.info(f'Ответ записан в файлы: {response_log_file_path} и {csv_file_path}')
     
